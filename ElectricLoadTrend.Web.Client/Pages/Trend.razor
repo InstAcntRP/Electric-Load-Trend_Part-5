@@ -1,0 +1,40 @@
+﻿@page "/trend"
+
+ @using Microsoft.AspNetCore.Components.Web
+ @rendermode RenderMode.InteractiveAuto
+ 
+@using Blazor_ApexCharts;
+ @using ElectricLoadTrend.Model;
+
+<h3>Trend</h3>
+
+@if(GenerationDataList ==null)
+{
+      <p>Loading....</p>
+}
+else
+{
+   <select title="Date" @onchange="onValueChanged">
+      <option value="Select" select disabled ="disabled" >Choose Date</option>
+      @foreach(string dateItem in dateList)
+      {
+         <option value="@dateItem">@dateItem</option>
+      }
+   </select>
+
+ <ApexChart @ref="apexChart" TItem="GenerationData" Title="Trend Chart">
+  <ApexPointSeries TItem="GenerationData"
+                         Items="ActualGenerationDataList"
+                         Name="Actal MW"
+                         SeriesType="SeriesType.Line"
+                         XValue="e => e.Dt"
+                         YValue="e=> (decimal) e.GeneratedMw" />
+ 
+   <ApexPointSeries TItem="GenerationData"
+                         Items="ForecastGenerationDataList"
+                         Name="Forecasted MW"
+                         SeriesType="SeriesType.Line"
+                         XValue="e => e.Dt"
+                         YValue="e=> (decimal) e.GeneratedMw" />
+    </ApexChart>
+}
